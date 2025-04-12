@@ -1,0 +1,246 @@
+<!-- This HTML file is a Zakat calculator interface. It allows users to input their assets and liabilities, select a Nisab type, and calculate their Zakat due. The results are stored in local storage and the user is redirected to a results page. The design includes various sections for inputs and labels, styled with CSS. The JavaScript at the end handles the calculation and redirection. -->
+<!--     <div class="zakat-due"></div>
+ -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Zakat Calculator</title>
+  <style>
+    .calculate-zakat, .calculate-zakat * {
+      box-sizing: border-box;
+    }
+    .calculate-zakat {
+      background: hwb(0 99% 0%);
+      height: 900px;
+      position: relative;
+      overflow: auto;
+      font-family: "Jura", sans-serif;
+    }
+    .image-1 {
+      width: 45px;
+      height: 45px;
+      position: absolute;
+      left: 19px;
+      top: 24px;
+      object-fit: cover;
+    }
+    .image-2 {
+      width: 43px;
+      height: 43px;
+      position: absolute;
+      left: 340px;
+      top: 24px;
+      object-fit: cover;
+    }
+    .zakatify {
+      color: #000000;
+      text-align: center;
+      font-weight: 700;
+      font-size: 20px;
+      position: absolute;
+      left: 53px;
+      top: 47px;
+    }
+    .rectangle-6 {
+      background: rgba(221, 216, 216, 0.76);
+      width: 393px;
+      height: 117px;
+      position: absolute;
+      left: 0;
+      top: 91px;
+    }
+    .rectangle-3 {
+      width: 335px;
+      height: 48px;
+      position: absolute;
+      left: 27px;
+      top: 101px;
+    }
+    .calculate-zakat2 {
+      color: #141414;
+      text-align: center;
+      font-weight: 700;
+      font-size: 24px;
+      position: absolute;
+      left: 90px;
+      top: 111px;
+    }
+    .calculate-your-annual-zakat-in-a-few-easy-steps {
+      color: #000000;
+      text-align: center;
+      font-size: 15px;
+      font-weight: 400;
+      position: absolute;
+      left: 30px;
+      top: 169px;
+    }
+
+    .rectangle-20 {
+      background: #d9d9d9;
+      border: 1px solid #000;
+      border-radius: 10px;
+      width: 277px;
+      height: 40px;
+      position: absolute;
+      left: 56px;
+      top: 772px;
+    }
+    .calculate-button {
+      background: #d9d9d9;
+      border: 1px solid #000;
+      border-radius: 10px;
+      width: 277px;
+      height: 40px;
+      position: absolute;
+      left: 56px;
+      top: 772px;
+      font-size: 20px;
+      font-weight: 700;
+      font-family: "Jura", sans-serif;
+      cursor: pointer;
+    }
+
+    /* Labels */
+    .asset-input-section, .nisab-section, .liabilities-input-section,
+    .cash-on-hand-bank, .gold-silver, .investment,
+    .business-inventory, .other-assets,
+    .short-term-debits, .bills-due, .other-liabilities,
+    .nisab-type-selector, .current-nisab-value {
+      color: #000000;
+      font-size: 14px;
+      font-family: "Jaldi", sans-serif;
+      font-weight: 400;
+      position: absolute;
+    }
+    .liabilities-input-section {
+      left: 20px;
+      top: 545px;
+      font-weight: 700;
+    }
+    .asset-input-section {
+      left: 20px;
+      top: 222px;
+      font-weight: 700;
+    }
+    .nisab-section {
+      left: 240px;
+      top: 222px;
+      font-weight: 700;
+    }
+
+    .cash-on-hand-bank { left: 21px; top: 251px; }
+    .gold-silver { left: 21px; top: 305px; }
+    .investment { left: 21px; top: 359px; }
+    .business-inventory { left: 21px; top: 413px; }
+    .other-assets { left: 21px; top: 470px; }
+    .short-term-debits { left: 21px; top: 569px; }
+    .bills-due { left: 21px; top: 628px; }
+    .other-liabilities { left: 21px; top: 686px; }
+    .nisab-type-selector { left: 239px; top: 251px; }
+    .current-nisab-value { left: 239px; top: 305px; }
+
+    /* Inputs */
+    input, select {
+      background: #ffffff;
+      border: 1px solid #000000;
+      width: 125px;
+      height: 25px;
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+      position: absolute;
+    }
+
+    .input-cash-on-hand-bank { left: 18px; top: 275px; }
+    .input-gold-silver { left: 19px; top: 326px; }
+    .input-investment { left: 18px; top: 383px; }
+    .input-business-inventory { left: 18px; top: 437px; }
+    .input-other-assets { left: 19px; top: 495px; }
+    .input-short-term-debits { left: 19px; top: 595px; }
+    .input-bills-due { left: 19px; top: 653px; }
+    .input-other-liabilities { left: 19px; top: 715px; }
+
+    .input-nisab-type-selector {
+      left: 237px;
+      top: 275px;
+    }
+    .input-current-nisab-value {
+      left: 237px;
+      top: 326px;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="calculate-zakat">
+    <img class="image-1" src="donation.svg" alt="logo left" />
+    <img class="image-2" src="menu-vertical.svg" alt="logo right" />
+    <div class="zakatify">Zakatify</div>
+    <div class="rectangle-6"></div>
+    <img class="rectangle-3"/>
+    <div class="calculate-zakat2">Calculate Zakat</div>
+    <div class="calculate-your-annual-zakat-in-a-few-easy-steps">
+      Calculate your annual Zakat in a few easy steps
+    </div>
+
+    <div class="asset-input-section">Asset Input Section</div>
+    <div class="nisab-section">Nisab Section</div>
+    <div class="liabilities-input-section">Liabilities-input-section</div>
+
+    <!-- Labels -->
+    <div class="cash-on-hand-bank">Cash on Hand & Bank</div>
+    <div class="gold-silver">Gold & Silver</div>
+    <div class="investment">Investment</div>
+    <div class="business-inventory">Business Inventory</div>
+    <div class="other-assets">Other Assets</div>
+    <div class="short-term-debits">Short-term Debts</div>
+    <div class="bills-due">Bills Due</div>
+    <div class="other-liabilities">Other Liabilities</div>
+    <div class="nisab-type-selector">Nisab Type</div>
+    <div class="current-nisab-value">Nisab Value</div>
+
+    <!-- Inputs -->
+    <input type="number" class="input-cash-on-hand-bank" />
+    <input type="number" class="input-gold-silver" />
+    <input type="number" class="input-investment" />
+    <input type="number" class="input-business-inventory" />
+    <input type="number" class="input-other-assets" />
+    <input type="number" class="input-short-term-debits" />
+    <input type="number" class="input-bills-due" />
+    <input type="number" class="input-other-liabilities" />
+
+    <select class="input-nisab-type-selector">
+      <option value="gold">Gold</option>
+      <option value="silver">Silver</option>
+    </select>
+    <input type="number" class="input-current-nisab-value" />
+
+    <button class="calculate-button">Calculate Zakat</button>
+  </div>
+</body>
+</html>
+<script>
+  document.querySelector('.calculate-button').addEventListener('click', function () {
+    const data = {
+      totalAssets: (
+        (parseFloat(document.querySelector('.input-cash-on-hand-bank').value) || 0) +
+        (parseFloat(document.querySelector('.input-gold-silver').value) || 0) +
+        (parseFloat(document.querySelector('.input-investment').value) || 0) +
+        (parseFloat(document.querySelector('.input-business-inventory').value) || 0) +
+        (parseFloat(document.querySelector('.input-other-assets').value) || 0)
+      ),
+      totalLiabilities: (
+        (parseFloat(document.querySelector('.input-short-term-debits').value) || 0) +
+        (parseFloat(document.querySelector('.input-bills-due').value) || 0) +
+        (parseFloat(document.querySelector('.input-other-liabilities').value) || 0)
+      ),
+      nisabValue: parseFloat(document.querySelector('.input-current-nisab-value').value) || 0
+    };
+
+    data.netAssets = data.totalAssets - data.totalLiabilities;
+    data.zakatDue = data.netAssets >= data.nisabValue ? data.netAssets * 0.025 : 0;
+
+    localStorage.setItem('zakatResults', JSON.stringify(data));
+    window.location.href = 'Result_zakat.html';
+  });
+</script>
